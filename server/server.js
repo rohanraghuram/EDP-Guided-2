@@ -117,6 +117,51 @@ app.get('/planets/:id', async (req, res) => {
     }
 });
 
+app.get('/films/:id/characters', async (req, res) => {
+    try {
+        const {id} = req.params;
+        const client = await MongoClient.connect(url);
+        const db = client.db(dbName);
+        const collection_one = db.collection(fc_collectionName);
+        const collection_two = db.collection(char_collectionName);
+        
+        const filmChars = await collection_one.find({ film_id: +id }).toArray();
+
+        if (!filmChars) {
+            return res.status(404).json({ error: 'Film not found' });
+        }
+
+        const charIDs = filmChars.map(fc => fc.character_id);
+        const characters = await collection_two.find({id: {$in: charIDs}}).toArray();
+        res.json(characters);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/films/:id/planets', async (req, res) => {
+    try {
+        const {id} = req.params;
+        const client = await MongoClient.connect(url);
+        const db = client.db(dbName);
+        const collection_one = db.collection(fp_collectionName);
+        const collection_two = db.collection(pla_collectionName);
+        
+        const filmPlanets = await collection_one.find({ film_id: +id }).toArray();
+
+        if (!filmPlanets) {
+            return res.status(404).json({ error: ' Film not found' });
+        }
+
+        const planetIDs = filmPlanets.map(fp => fp.planet_id);
+        const planets = await collection_two.find({id: {$in: planetIDs}}).toArray();
+        res.json(planets);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
