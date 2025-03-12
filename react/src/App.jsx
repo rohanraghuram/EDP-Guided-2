@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 
 import Home from "./components/Home";
+import CharacterDetails from "./components/CharacterDetails";
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
       < section id="charactersList">
         <Routes>
           <Route exact path="/" element={<Home data={data} />} />
+          <Route path="/characters/:id" element ={<CharacterDetails />} />
         </Routes>
       </section>
     </Router>
