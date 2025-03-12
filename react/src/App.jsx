@@ -19,7 +19,7 @@ function App() {
       <div>
         <h1>Star Wars Universe Lookup</h1>
         <section id="charactersList">
-          <CharacterList characters={characters} />
+        
         </section>
         <Routes>
         <Route path="/" element={<CharacterList />} />
