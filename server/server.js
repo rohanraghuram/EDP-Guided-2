@@ -161,7 +161,69 @@ app.get('/films/:id/planets', async (req, res) => {
     }
 });
 
+app.get('/characters/:id/films', async (req, res) => {
+    try {
+        const {id} = req.params;
+        const client = await MongoClient.connect(url);
+        const db = client.db(dbName);
+        const collection_one = db.collection(fc_collectionName);
+        const collection_two = db.collection(film_collectionName);
+        
+        const filmChars = await collection_one.find({ character_id: +id }).toArray();
 
+        if (!filmChars) {
+            return res.status(404).json({ error: 'Character not found' });
+        }
+
+        const filmIDs = filmChars.map(fc => fc.film_id);
+        const films = await collection_two.find({id: {$in: filmIDs}}).toArray();
+        res.json(films);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/planets/:id/films', async (req, res) => {
+    try {
+        const {id} = req.params;
+        const client = await MongoClient.connect(url);
+        const db = client.db(dbName);
+        const collection_one = db.collection(fp_collectionName);
+        const collection_two = db.collection(film_collectionName);
+        
+        const filmPlanets = await collection_one.find({ planet_id: +id }).toArray();
+
+        if (!filmPlanets) {
+            return res.status(404).json({ error: ' Planet not found' });
+        }
+
+        const filmIDs = filmPlanets.map(fp => fp.film_id);
+        const films = await collection_two.find({id: {$in: filmIDs}}).toArray();
+        res.json(films);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/planets/:id/characters', async (req, res) => {
+    try {
+        const {id} = req.params;
+        const client = await MongoClient.connect(url);
+        const db = client.db(dbName);
+        const collection_one = db.collection(char_collectionName);
+        
+        const charPlanets = await collection_one.find({ homeworld: +id }).toArray();
+
+        if (!charPlanets) {
+            return res.status(404).json({ error: ' No inhabitants for this planet or Planet not found' });
+        }
+
+        res.json(charPlanets);
+        
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
