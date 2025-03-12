@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import CharacterList from './components/CharacterList'
+import CharacterDetails from './components/CharacterDetails'
 import './App.css'
 import {
   BrowserRouter as Router,
@@ -11,12 +12,6 @@ import {
 function App() {
   const [characters, setCharacters] = useState([])
 
-  useEffect(() => {
-    fetch('http://localhost:3000/characters')
-      .then((response) => response.json())
-      .then((data) => setCharacters(data))
-      .catch((error) => console.error('Error fetching characters:', error));
-  }, []);
 
   return (
     <>
@@ -26,6 +21,10 @@ function App() {
         <section id="charactersList">
           <CharacterList characters={characters} />
         </section>
+        <Routes>
+        <Route path="/" element={<CharacterList />} />
+        <Route path="/characters/:id" element={<CharacterDetails />} />
+        </Routes>
       </div>
     </Router>
     </>
