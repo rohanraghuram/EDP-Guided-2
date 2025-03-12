@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router';
 
 const CharacterDetails = () => {
     const [character, setCharacter] = useState({});
-    const [planet, setPlanet] = useState({});
+    const [planet, setPlanet] = useState([]);
     const [films, setFilms] = useState([]);
     let params = useParams();
 
@@ -46,7 +46,9 @@ const CharacterDetails = () => {
           <section id="planets">
             {console.log(planet)}
             <h2>Homeworld</h2>
-            <p> <span id="homeworld"><Link to={`/planet/${planet.id}`}> {planet.name} </Link></span></p>
+            <ul>
+              {planet.map((planet) => (<li key = {planet.id}><Link to = {`/planet/${planet.id}`}>{planet.name}</Link></li>))}
+            </ul>
           </section>
           <section id="films">
             <h2>Films appeared in</h2>
