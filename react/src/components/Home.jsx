@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 
 const Home = (props) => {
     const navigate = useNavigate();
-    <h1>Characters</h1>
+   
     return (
         <div className="card-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
             <h1>Characters</h1>
