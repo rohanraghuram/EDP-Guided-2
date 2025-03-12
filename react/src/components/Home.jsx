@@ -1,4 +1,3 @@
-import CharacterList from "./CharacterList";
 import { useNavigate } from "react-router";
 
 

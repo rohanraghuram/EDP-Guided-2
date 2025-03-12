@@ -183,6 +183,28 @@ app.get('/characters/:id/films', async (req, res) => {
     }
 });
 
+app.get('/characters/:id/planet', async (req, res) => {
+    try {
+        const {id} = req.params;
+        const client = await MongoClient.connect(url);
+        const db = client.db(dbName);
+        const collection_one = db.collection(char_collectionName);
+        const collection_two = db.collection(pla_collectionName);
+        
+        const char = await collection_one.find({ id: +id }).toArray();
+
+        if (!char) {
+            return res.status(404).json({ error: 'Character not found' });
+        }
+
+        const homeworld = char.map(char => char.homeworld);
+        const planet = await collection_two.find({id: {$in: homeworld}}).toArray();
+        res.json(planet);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 app.get('/planets/:id/films', async (req, res) => {
     try {
         const {id} = req.params;

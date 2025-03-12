@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 
 import Home from "./components/Home";
+import CharacterDetails from "./components/CharacterDetails";
 
 
 function App() {
@@ -35,9 +36,10 @@ function App() {
       <div>
         <h1>Star Wars Universe Lookup</h1>
       </div>
-      <section id="charactersList">
+      < section id="charactersList">
         <Routes>
           <Route exact path="/" element={<Home data={data} />} />
+          <Route path="/characters/:id" element={<CharacterDetails />} />
         </Routes>
       </section>
     </Router>
