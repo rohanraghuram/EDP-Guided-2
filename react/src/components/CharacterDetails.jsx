@@ -40,20 +40,20 @@ const CharacterDetails = () => {
           <h1 id="name"> {character.name}</h1>
           <section id="generalInfo">
             <p>Height: <span id="height"></span> {character.height} cm</p>
-            <p>Mass: <span id="mass"></span> {character.mass}</p>
+            <p>Mass: <span id="mass"></span> {character.mass} kg </p>
             <p>Born: <span id="birth_year"></span> {character.birth_year} </p>
           </section>
           <section id="planets">
             {console.log(planet)}
             <h2>Homeworld</h2>
             <ul>
-              {planet.map((planet) => (<li key = {planet.id}><Link to = {`/planet/${planet.id}`}>{planet.name}</Link></li>))}
+              {planet.map((planet) => (<li key = {planet.id}><Link to = {`/planets/${planet.id}`}>{planet.name}</Link></li>))}
             </ul>
           </section>
           <section id="films">
             <h2>Films appeared in</h2>
             <ul>
-              {films.map((film) => (<li key = {film.id}><Link to = {`/film/${film.id}`}>{film.title}</Link></li>))}
+              {films.map((film) => (<li key = {film.id}><Link to = {`/films/${film.id}`}>{film.title}</Link></li>))}
             </ul>
           </section>
         </main>
