@@ -1,76 +1,65 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router';
+
 
 const Planets = () => {
-    const [planet, setPlanet] = useState(null);
+    const [planet, setPlanet] = useState({});
     const [characters, setCharacters] = useState([]);
     const [films, setFilms] = useState([]);
-    const { id } = useParams();
+    let params = useParams();
 
     useEffect(() => {
-        fetch(`http://localhost:3000/planets/${id}`)
-            .then(response => response.json())
-            .then(data => {
-                setPlanet(data);
-                fetchCharacters(data.characters);
-                fetchFilms(data.films);
-            })
-            .catch(error => console.error('Error fetching planets:', error));
-    }, [id]);
+        const fetchPlanet = async () => {
+          const planetData = await fetch(`${import.meta.env.VITE_SW_API_URL}/planets/${params.id}`);
+          const jsonPlanet = await planetData.json();
+          setPlanet(jsonPlanet);
+        };
+        fetchPlanet();
+        }, []);
 
-    const fetchCharacters = async (characterIds) => {
-        try {
-            const characterPromises = characterIds.map(async (characterId) => {
-                const response = await fetch(`http://localhost:3000/characters/${characterId}`);
-                return response.json();
-            });
-            
-            const characterData = await Promise.all(characterPromises);
-            setCharacters(characterData);
-        } catch (error) {
-            console.error('Error fetching characters:', error);
-        }
-    };
 
-    const fetchFilms = async (filmIds) => {
-        try {
-            const filmPromises = filmIds.map(async (filmId) => {
-                const response = await fetch(`http://localhost:3000/films/${filmId}`);
-                return response.json();
-            });
-            
-            const filmData = await Promise.all(filmPromises);
-            setFilms(filmData);
-        } catch (error) {
-            console.error('Error fetching films:', error);
-        }
-    };
+    useEffect(() => {
+        const fetchChars = async () => {
+            const charsData = await fetch(`${import.meta.env.VITE_SW_API_URL}/planets/${params.id}/characters`);
+            const jsonChars = await charsData.json();
+            setCharacters(jsonChars);
+        };
+        fetchChars();
+        }, []);
+
+    useEffect(() => {
+        const fetchFilms = async () => {
+            const filmData = await fetch(`${import.meta.env.VITE_SW_API_URL}/planets/${params.id}/films`);
+            const jsonFilms = await filmData.json();
+            setFilms(jsonFilms);
+        };
+        fetchFilms();
+        }, []);
+    
 
     return (
-        <div id="name">
-            <h1>{planet.name}</h1>
-            <div id="generalInfo">
-                <p><span>Climate:</span> {planet.climate} cm</p>
-                <p><span>Diameter:</span> {planet.diameter} kg</p>
-                <p><span>Population:</span> {planet.population}</p>
-            </div>
-            <div id="characters">
-                <p><span>Characters Born Here:</span></p>
-                <ul>
-                    {characters.map(character => (
-                        <li key={character.id}>{character.name}</li>
-                    ))}
-                </ul>
-            </div>
-            <div id="films">
-                <p><span>Films Apperared In:</span></p>
-                <ul>
-                    {films.map(film => (
-                        <li key={film.id}>{film.name}</li>
-                    ))}
-                </ul>
-            </div>
-        </div>
+        <>
+        <main>
+          <h1 id="name"> {planet.name} </h1>
+          <section id="generalInfo">
+            <p><span id ="climate">Climate: </span> {planet.climate} </p>
+            <p><span id = "terrain">Terrain: </span> {planet.terrain} </p>
+            <p><span id = "population">Population: </span> {planet.population} </p>
+          </section>
+          <section id="characters">
+            <h2>Characters Born Here </h2>
+            <ul>
+              {characters.map((char) => (<li key = {char.id}><Link to = {`/characters/${char.id}`}>{char.name}</Link></li>))}
+            </ul>
+          </section>
+          <section id="films">
+            <h2>Films Appeared in </h2>
+            <ul>
+              {films.map((film) => (<li key = {film.id}><Link to = {`/films/${film.id}`}>{film.title}</Link></li>))}
+            </ul>
+          </section>
+        </main>
+      </>
     );
 };
 

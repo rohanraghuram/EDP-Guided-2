@@ -9,6 +9,7 @@ import {
 import Home from "./components/Home";
 import CharacterDetails from "./components/CharacterDetails";
 import Films from "./components/Films";
+import Planets from "./components/Planets";
 
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
           <Route exact path="/" element={<Home data={data} />} />
           <Route path="/characters/:id" element ={<CharacterDetails />} />
           <Route path="/films/:id" element ={<Films />} />
+          <Route path="/planets/:id" element ={<Planets />} />
         </Routes>
       </section>
     </Router>
